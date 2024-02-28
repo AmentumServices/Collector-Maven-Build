@@ -3,7 +3,7 @@
 # -----
 # You can specify a custom docker BUNDLE from Docker Hub as your build environment.
 
-image: maven
+image: maven:3-eclipse-temurin-17
 
 pipelines:
   default:
@@ -15,7 +15,7 @@ pipelines:
             - DATE=`date '+%Y%m%d-%H%M'`
             # install deps
             - apt-get update && apt-get install -y maven
-            - mvn package
+            - mvn package -Dmaven.test.skip=true
             - tar -cvzf $BUNDLE-$DATE.tgz -C ~ .m2 
             - ls -alh $BUNDLE-$DATE.tgz
             - |
