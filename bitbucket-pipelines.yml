@@ -8,19 +8,15 @@ image: maven
 pipelines:
   default:
       - step:
-          name: 'grab BUNDLEs'
+          name: 'Grab m2'
           cache: maven
           script:
-            # install deps
-            - apt-get update && apt-get install -y maven
-            - set -e
-            - echo "Setting Variables"
             - BUNDLE="maven-m2"
             - DATE=`date '+%Y%m%d-%H%M'`
-            - echo "Running maven"
+            # install deps
+            - apt-get update && apt-get install -y maven
             - mvn package
-            - tar -cvzf $BUNDLE-$DATE.tgz -c ~ .m2
-            - pwd            
+            - tar -cvzf $BUNDLE-$DATE.tgz -C ~ .m2 
             - ls -alh $BUNDLE-$DATE.tgz
             - |
               curl -X POST \
