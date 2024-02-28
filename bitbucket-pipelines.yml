@@ -16,7 +16,7 @@ pipelines:
             # install deps
             - mvn package -Dmaven.test.skip=true
             - tar -cvzf $BUNDLE-$DATE.tgz -C ~ .m2 
-            - ls -alh
+            - ls -alh *
             - |
               curl -X POST \
                 "https://${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" \
