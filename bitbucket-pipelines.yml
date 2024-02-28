@@ -7,8 +7,9 @@ image: maven:3-eclipse-temurin-17
 
 pipelines:
   default:
+    parallel:
       - step:
-          name: 'Grab m2'
+          name: 'bundle m2'
           cache: maven
           script:
             - BUNDLE="maven-m2"
@@ -16,7 +17,23 @@ pipelines:
             # install deps
             - mvn package -Dmaven.test.skip=true
             - tar -cvzf $BUNDLE-$DATE.tgz -C ~ .m2 
-            - ls -alh *
+            - ls -alht *
+            - |
+              curl -X POST \
+                "https://${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" \
+                --form files=@"$BUNDLE-$DATE.tgz"
+          artifacts: # defining the artifacts to be passed to each future step.
+           - $BUNDLE-$DATE.tgz
+      - step:
+          name: 'Bundle target'
+          cache: maven
+          script:
+            - BUNDLE="maven-target"
+            - DATE=`date '+%Y%m%d-%H%M'`
+            # install deps
+            - mvn package -Dmaven.test.skip=true
+            - tar -cvzf $BUNDLE-$DATE.tgz -C target . 
+            - ls -alht *
             - |
               curl -X POST \
                 "https://${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" \
