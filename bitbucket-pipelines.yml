@@ -7,9 +7,9 @@ image: maven:3-eclipse-temurin-17
 
 pipelines:
   default:
-    parallel:
+    - parallel:
       - step:
-          name: 'bundle m2'
+          name: 'Bundle m2'
           cache: maven
           script:
             - BUNDLE="maven-m2"
