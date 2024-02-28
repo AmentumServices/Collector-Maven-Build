@@ -42,7 +42,7 @@ pipelines:
             - |
               curl -X POST \
                 "https://${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" \
-                --form files=@"demo-0.0.1-SNAPSHOT.zip"
+                --form files=@"demo-0.0.1.zip"
           artifacts: # defining the artifacts to be passed to each future step.
            - $BUNDLE-$DATE.tgz
 
