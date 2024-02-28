@@ -1,0 +1,31 @@
+# This is an example Starter pipeline configuration
+# Use a skeleton to build, test and deploy using manual and parallel steps
+# -----
+# You can specify a custom docker BUNDLE from Docker Hub as your build environment.
+
+image: maven
+
+pipelines:
+  default:
+      - step:
+          name: 'grab BUNDLEs'
+          cache: maven
+          script:
+            # install deps
+            - apt-get update && apt-get install -y maven
+            - set -e
+            - echo "Setting Variables"
+            - BUNDLE="maven-m2"
+            - DATE=`date '+%Y%m%d-%H%M'`
+            - echo "Running maven"
+            - mvn package
+            - tar -cvzf $BUNDLE-$DATE.tgz -c ~ .m2
+            - pwd            
+            - ls -alh $BUNDLE-$DATE.tgz
+            - |
+              curl -X POST \
+                "https://${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" \
+                --form files=@"$BUNDLE-$DATE.tgz"
+          artifacts: # defining the artifacts to be passed to each future step.
+           - $BUNDLE-$DATE.tgz
+

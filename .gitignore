@@ -31,3 +31,19 @@ build/
 
 ### VS Code ###
 .vscode/
+*.code-workspace
+**/.vscode
+
+
+target
+lib
+inventory/
+**.jar
+**/*.exe
+**/*.bak
+**/~$*
+bin/
+.project
+.settings/
+.classpath
+dependency-reduced-pom.xml
