@@ -14,7 +14,6 @@ pipelines:
             - BUNDLE="maven-m2"
             - DATE=`date '+%Y%m%d-%H%M'`
             # install deps
-            - apt-get update && apt-get install -y maven
             - mvn package -Dmaven.test.skip=true
             - tar -cvzf $BUNDLE-$DATE.tgz -C ~ .m2 
             - ls -alh $BUNDLE-$DATE.tgz
