@@ -32,12 +32,17 @@ pipelines:
             - DATE=`date '+%Y%m%d-%H%M'`
             # install deps
             - mvn package -Dmaven.test.skip=true
+            - mv target/*.zip .
             - tar -cvzf $BUNDLE-$DATE.tgz -C target . 
             - ls -alht *
             - |
               curl -X POST \
                 "https://${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" \
                 --form files=@"$BUNDLE-$DATE.tgz"
+            - |
+              curl -X POST \
+                "https://${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}@api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" \
+                --form files=@"*.zip"
           artifacts: # defining the artifacts to be passed to each future step.
            - $BUNDLE-$DATE.tgz
 
