@@ -10,7 +10,7 @@ name: Java CI with Maven
 run-name: ${{ github.actor }} is Collecting Maven-ness🚀
 on: [push]
 jobs:
-  build:
+  Collect:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -49,16 +49,11 @@ jobs:
         with:
           name: maven-collector-assembly-${{ steps.date.outputs.date }}.zip
           path: target/demo-0.0.1.zip
-      - name: Archive BOM.xml
+      - name: Archive BOM
         uses: actions/upload-artifact@v4
         with:
-          name: maven-collector-${{ steps.date.outputs.date }}.bom.xml
-          path: target/bom.xml
-      - name: Archive BOM.json
-        uses: actions/upload-artifact@v4
-        with:
-          name: maven-collector-${{ steps.date.outputs.date }}.bom.json
-          path: target/bom.json
+          name: maven-collector-${{ steps.date.outputs.date }}.bom
+          path: target/bom.*
         
       - name: Publish Artifacts
         run: |
