@@ -49,7 +49,17 @@ jobs:
         with:
           name: maven-collector-assembly-${{ steps.date.outputs.date }}.zip
           path: target/demo-0.0.1.zip
-          
+      - name: Archive BOM.xml
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-collector-${{ steps.date.outputs.date }}.bom.xml
+          path: target/bom.xml
+      - name: Archive BOM.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-collector-${{ steps.date.outputs.date }}.bom.json
+          path: target/bom.json
+        
       - name: Publish Artifacts
         run: |
           curl -L \
