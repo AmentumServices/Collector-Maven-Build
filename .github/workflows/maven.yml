@@ -7,67 +7,66 @@
 # documentation.
 
 name: Java CI with Maven
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
+run-name: ${{ github.actor }} is Collecting Maven-ness🚀
+on: [push]
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - name: Check out repository code
-      uses: actions/checkout@v4
-    - name: Get current date
-      id: DATE
-      run: echo "DATE=$(date '+%Y%m%d-%H%M')" >> $GITHUB_OUTPUT
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
-    - name: Build with Maven
-      run: mvn -DskipTests=true -B package --file pom.xml
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - name: Get current date
+        id: DATE
+        run: echo "DATE=$(date '+%Y%m%d-%H%M')" >> $GITHUB_OUTPUT
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      
+      - name: Build with Maven
+        run: mvn -DskipTests=true -B package --file pom.xml
 
-    - name: Bundle .m2 directory
-      run: |
-          ls -lah ${{ github.workspace }}
-          DATE=`date '+%Y%m%d-%H%M'`
-          tar -cvzf maven-collector-m2-${{ steps.date.outputs.date }}.tgz -C ~/.m2 .
+      - name: Bundle .m2 directory
+        run: |
+            ls -lah ${{ github.workspace }}
+            DATE=`date '+%Y%m%d-%H%M'`
+            tar -cvzf maven-collector-m2-${{ steps.date.outputs.date }}.tgz -C ~/.m2 .
+
+      - name: Archive M2 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-collector-m2-${{ steps.date.outputs.date }}.tgz
+          path: maven-collector-m2-${{ steps.date.outputs.date }}.tgz
+      - name: Archive assembly artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-collector-assembly-${{ steps.date.outputs.date }}.zip
+          path: target/demo-0.0.1.zip
           
-    - name: Archive M2 artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: maven-collector-m2-${{ steps.date.outputs.date }}.tgz
-        path: maven-collector-m2-${{ steps.date.outputs.date }}.tgz
-    - name: Archive assembly artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: maven-collector-assembly-${{ steps.date.outputs.date }}.zip
-        path: target/demo-0.0.1.zip
-        
-    - name: Publish Artifacts
-      run: |
-        curl -L \
-          -X PATCH \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          https://api.github.com/repos/${{ github.repository }}/releases/assets/maven-collector-m2-${{ steps.date.outputs.date }}.tgz \
-          -d '{"name":"maven-collector-m2-${{ steps.date.outputs.date }}.tgz","label":"TGZ"}'
-        curl -L \
-          -X PATCH \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          https://api.github.com/repos/${{ github.repository }}/releases/assets/maven-collector-assembly-${{ steps.date.outputs.date }}.zip \
-          -d '{"name":"maven-collector-assembly-${{ steps.date.outputs.date }}.zip","label":"ZIP"}'
-
-    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
-    #- name: Update dependency graph
-    #  uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+      - name: Publish Artifacts
+        run: |
+          curl -L \
+            -X PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/releases/assets/maven-collector-m2-${{ steps.date.outputs.date }}.tgz \
+            -d '{"name":"maven-collector-m2-${{ steps.date.outputs.date }}.tgz","label":"TGZ"}'
+          curl -L \
+            -X PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/releases/assets/maven-collector-assembly-${{ steps.date.outputs.date }}.zip \
+            -d '{"name":"maven-collector-assembly-${{ steps.date.outputs.date }}.zip","label":"ZIP"}'
+  
+      # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+      #- name: Update dependency graph
+      #  uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
