@@ -39,6 +39,12 @@ jobs:
             DATE=`date '+%Y%m%d-%H%M'`
             tar -cvzf maven-collector-m2-${{ steps.date.outputs.date }}.tgz -C ~/.m2 .
 
+      - name: Bundle BoM ZIP
+        run: |
+            cd target
+            ls -lah ${{ github.workspace }}
+            zip ../maven-collector-bom-${{ steps.date.outputs.date }}.zip bom.*
+
       - name: Archive M2 artifact
         uses: actions/upload-artifact@v4
         with:
@@ -52,26 +58,46 @@ jobs:
       - name: Archive BOM
         uses: actions/upload-artifact@v4
         with:
-          name: maven-collector-${{ steps.date.outputs.date }}.bom
-          path: target/bom.*
-        
-      - name: Publish Artifacts
-        run: |
-          curl -L \
-            -X PATCH \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/${{ github.repository }}/releases/assets/maven-collector-m2-${{ steps.date.outputs.date }}.tgz \
-            -d '{"name":"maven-collector-m2-${{ steps.date.outputs.date }}.tgz","label":"TGZ"}'
-          curl -L \
-            -X PATCH \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/${{ github.repository }}/releases/assets/maven-collector-assembly-${{ steps.date.outputs.date }}.zip \
-            -d '{"name":"maven-collector-assembly-${{ steps.date.outputs.date }}.zip","label":"ZIP"}'
+          name: maven-collector-bom-${{ steps.date.outputs.date }}.zip
+          path: maven-collector-bom-${{ steps.date.outputs.date }}.zip
+  
   
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       #- name: Update dependency graph
       #  uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.date.outputs.date }}
+          release_name: Release ${{ steps.date.outputs.date }}
+          draft: false
+          prerelease: false
+          
+      - name: Upload Release tgz
+        id: upload-release-tgz 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./maven-collector-m2-${{ steps.date.outputs.date }}.tgz
+          asset_name: maven-collector-m2-${{ steps.date.outputs.date }}.tgz
+          asset_content_type: application/tgz
+          
+      - name: Upload Release BOM
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./maven-collector-bom-${{ steps.date.outputs.date }}.zip
+          asset_name: maven-collector-bom-${{ steps.date.outputs.date }}.zip
+          asset_content_type: application/zip
+
+      
+      
