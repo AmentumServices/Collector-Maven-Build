@@ -8,7 +8,12 @@
 
 name: Java CI with Maven
 run-name: ${{ github.actor }} is Collecting Maven-ness🚀
-on: [push]
+on: 
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * 1' # Update weekly on Monday Midnight
 jobs:
   Collect:
     runs-on: ubuntu-latest
