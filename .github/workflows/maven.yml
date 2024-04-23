@@ -68,36 +68,9 @@ jobs:
 
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.date.outputs.date }}
-          release_name: Release ${{ steps.date.outputs.date }}
-          draft: false
-          prerelease: false
-          
-      - name: Upload Release tgz
-        id: upload-release-tgz 
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./maven-collector-m2-${{ steps.date.outputs.date }}.tgz
-          asset_name: maven-collector-m2-${{ steps.date.outputs.date }}.tgz
-          asset_content_type: application/tgz
-          
-      - name: Upload Release BOM
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./maven-collector-bom-${{ steps.date.outputs.date }}.zip
-          asset_name: maven-collector-bom-${{ steps.date.outputs.date }}.zip
-          asset_content_type: application/zip
-
-      
-      
+          files: |
+            ./maven-collector-m2-${{ steps.date.outputs.date }}.tgz
+            ./maven-collector-m2-${{ steps.date.outputs.date }}.tgz
