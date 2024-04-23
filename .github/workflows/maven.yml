@@ -53,17 +53,19 @@ jobs:
             ls -lah
             zip ../maven-collector-bom-${{ steps.date.outputs.date }}.zip bom.*
 
-      - name: Archive M2 artifacts
+      - name: Upload M2 artifact
         uses: actions/upload-artifact@v4
         with:
           name: maven-collector-m2-${{ steps.date.outputs.date }}.tgz
           path: maven-collector-m2-${{ steps.date.outputs.date }}.tgz
-      - name: Archive assembly artifact
+          
+      - name: Upload assembly artifact
         uses: actions/upload-artifact@v4
         with:
           name: maven-collector-assembly-${{ steps.date.outputs.date }}.zip
           path: target/demo-0.0.1.zip
-      - name: Archive BOM
+          
+      - name: Upload BOM ZIP
         uses: actions/upload-artifact@v4
         with:
           name: maven-collector-bom-${{ steps.date.outputs.date }}.zip
@@ -88,14 +90,6 @@ jobs:
           tag_exists_error: false
           message: "Release for ${{ steps.date.outputs.date }} run"
 
-      - name: Download Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          merge-multiple: true
-       
-      - name: Show Artifacts
-        run: ls -alh
-          
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v2
@@ -103,5 +97,5 @@ jobs:
           tag_name: ${{ steps.date.outputs.date }}
           make_latest: true
           files: |
-            maven-collector-m2-*.tgz
-            maven-collector-bom-*.zip
+            maven-collector-*.tgz
+            maven-collector-*.zip
