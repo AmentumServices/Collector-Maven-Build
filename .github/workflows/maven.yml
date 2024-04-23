@@ -42,7 +42,7 @@ jobs:
       - name: Bundle BoM ZIP
         run: |
             cd target
-            ls -lah ${{ github.workspace }}
+            ls -lah
             zip ../maven-collector-bom-${{ steps.date.outputs.date }}.zip bom.*
 
       - name: Archive M2 artifact
@@ -66,11 +66,27 @@ jobs:
       #- name: Update dependency graph
       #  uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
 
+      - name: Create tag
+        uses: rickstaa/action-create-tag@v1
+        id: tag_create
+        with:
+          tag: ${{ steps.date.outputs.date }}
+          tag_exists_error: false
+          message: "Release for ${{ steps.date.outputs.date }} run"
+          
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.date.outputs.date }}
+          make_latest: true
           files: |
-            ./maven-collector-m2-${{ steps.date.outputs.date }}.tgz
-            ./maven-collector-m2-${{ steps.date.outputs.date }}.tgz
+            maven-collector-m2-${{ steps.date.outputs.date }}.tgz
+            maven-collector-bom-${{ steps.date.outputs.date }}.zip
+
+      - name: Release info
+        run: |
+          echo -e "\nRelease Info:"
+          echo -e  "\tRelease ID:  ${{ steps.create_release.id}}"
+          echo -e  "\tRelease URL: ${{ steps.create_release.url}}"
+          echo -e  "\tAssets:\n ${{ steps.create_release.assets}}"
