@@ -96,6 +96,6 @@ jobs:
       - name: Release info
         run: |
           echo -e "\nRelease Info:"
-          echo -e  "\tRelease ID:  ${{ steps.create_release.id}}"
-          echo -e  "\tRelease URL: ${{ steps.create_release.url}}"
-          echo -e  "\tAssets:\n ${{ steps.create_release.assets}}"
+          echo -e  "\tRelease ID:  ${{ steps.create_release.id }}"
+          echo -e  "\tRelease URL: ${{ steps.create_release.url }}"
+          echo -e  "\tAssets:\n ${{ steps.create_release.assets }}"
