@@ -33,19 +33,19 @@ jobs:
       - name: Build with Maven
         run: mvn -DskipTests=true -B package --file pom.xml
 
-      - name: Bundle .m2 directory
+      - name: TARchive .m2 directory
         run: |
             ls -lah ${{ github.workspace }}
             DATE=`date '+%Y%m%d-%H%M'`
             tar -cvzf maven-collector-m2-${{ steps.date.outputs.date }}.tgz -C ~/.m2 .
 
-      - name: Bundle BoM ZIP
+      - name: Create BoM ZIP
         run: |
             cd target
             ls -lah
             zip ../maven-collector-bom-${{ steps.date.outputs.date }}.zip bom.*
 
-      - name: Archive M2 artifact
+      - name: Archive M2 artifacts
         uses: actions/upload-artifact@v4
         with:
           name: maven-collector-m2-${{ steps.date.outputs.date }}.tgz
@@ -71,6 +71,7 @@ jobs:
         id: tag_create
         with:
           tag: ${{ steps.date.outputs.date }}
+          github_token: ${{secrets.GITHUB_TOKEN}}
           tag_exists_error: false
           message: "Release for ${{ steps.date.outputs.date }} run"
           
