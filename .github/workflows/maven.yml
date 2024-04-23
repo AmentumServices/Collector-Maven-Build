@@ -87,6 +87,14 @@ jobs:
           github_token: ${{secrets.GITHUB_TOKEN}}
           tag_exists_error: false
           message: "Release for ${{ steps.date.outputs.date }} run"
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+       
+      - name: Show Artifacts
+        run: ls -alh
           
       - name: Create Release
         id: create_release
