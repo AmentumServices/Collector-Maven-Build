@@ -21,13 +21,8 @@ jobs:
       contents: write
       pull-requests: read
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Check out repository code
         uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: Get current date
         id: DATE
         run: echo "DATE=$(date '+%Y%m%d-%H%M')" >> $GITHUB_OUTPUT
@@ -45,7 +40,8 @@ jobs:
         run: |
             ls -lah ${{ github.workspace }}
             DATE=`date '+%Y%m%d-%H%M'`
-            tar -cvzf maven-collector-m2-${{ steps.date.outputs.date }}.tgz -C ~/.m2 .
+            tar -cvzf maven-collector-m2-${{ steps.date.outputs.date }}.tgz -C ~/.m2 . \
+              | tee maven-collector-m2-${{ steps.date.outputs.date }}.tgz.txt
 
       - name: Create BoM ZIP
         run: |
@@ -58,6 +54,12 @@ jobs:
         with:
           name: maven-collector-m2-${{ steps.date.outputs.date }}.tgz
           path: maven-collector-m2-${{ steps.date.outputs.date }}.tgz
+
+      - name: Upload M2 ToC artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-collector-m2-${{ steps.date.outputs.date }}.tgz.txt
+          path: maven-collector-m2-${{ steps.date.outputs.date }}.txt
           
       - name: Upload assembly artifact
         uses: actions/upload-artifact@v4
@@ -99,3 +101,4 @@ jobs:
           files: |
             maven-collector-*.tgz
             maven-collector-*.zip
+            maven-collector-*.txt
