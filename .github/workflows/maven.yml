@@ -36,6 +36,9 @@ jobs:
       - name: Build with Maven
         run: mvn -DskipTests=true -B package --file pom.xml
 
+      - name: Report on Dependecy version updates
+        run: mvn -DskipTests=true versions:display-dependency-updates
+      
       - name: TARchive .m2 directory
         run: |
             ls -lah ${{ github.workspace }}
