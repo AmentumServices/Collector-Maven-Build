@@ -460,28 +460,19 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-dependency-plugin</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.maven.wagon</groupId>
 			<artifactId>wagon-file</artifactId>
+			<version>3.5.3<version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.wagon</groupId>
 			<artifactId>wagon-http</artifactId>
+			<version>3.5.3<version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.wagon</groupId>
 			<artifactId>wagon-ssh</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.cyclonedx</groupId>
-			 <artifactId>cyclonedx-maven-plugin</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			 <artifactId>maven-assembly-plugin</artifactId>
+			<version>3.5.3<version
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
@@ -491,11 +482,13 @@
 		<dependency>
 			<groupId>org.graalvm.buildtools</groupId>
 			<artifactId>native-maven-plugin</artifactId>
+			<version>0.10.1<version
 		</dependency>
 
 		<dependency>
 			<groupId>com.google.cloud.tools</groupId>
 			<artifactId>jib-maven-plugin</artifactId>
+			<version>3.4.2<version
 		</dependency>
 	
 	</dependencies>
