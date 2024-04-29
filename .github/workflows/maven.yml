@@ -45,7 +45,7 @@ jobs:
           git push
            
       - name: Build with Maven
-        run: mvn -DskipTests=true -B package --file pom.xm
+        run: mvn -DskipTests=true -B package
       
       - name: TARchive .m2 directory
         run: |
