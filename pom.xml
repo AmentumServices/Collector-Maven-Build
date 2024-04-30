@@ -599,6 +599,17 @@
               <stripVersion>false</stripVersion>
 						</configuration>
 					</execution>
+	  <execution>
+            <id>prepare for offline Maven Dependencies</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>go-offline</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}</outputDirectory>
+              <stripVersion>false</stripVersion>
+						</configuration>
+					</execution
 				</executions>
       </plugin>
 	<plugin>
