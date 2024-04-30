@@ -609,7 +609,7 @@
               <outputDirectory>${project.build.directory}</outputDirectory>
               <stripVersion>false</stripVersion>
 						</configuration>
-					</execution
+					</execution>
 				</executions>
       </plugin>
 	<plugin>
