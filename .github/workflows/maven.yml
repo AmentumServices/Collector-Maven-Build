@@ -117,8 +117,8 @@ jobs:
       - name: Upload XSD artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ vars.COLLECTOR }}-m2-${{ needs.Date.outputs.Date }}.tgz
-          path: ${{ vars.COLLECTOR }}-m2-${{ needs.Date.outputs.Date }}.tgz
+          name: ${{ vars.COLLECTOR }}-xsd-${{ needs.Date.outputs.Date }}.tgz
+          path: ${{ vars.COLLECTOR }}-xsd-${{ needs.Date.outputs.Date }}.tgz
     
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       #- name: Update dependency graph
