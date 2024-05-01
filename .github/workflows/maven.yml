@@ -87,6 +87,7 @@ jobs:
 
       - name: Collect http://maven.apache.org/xsd
         run: |
+          sudo apt-get install -y wget
           wget -np -rqN --show-progress http://maven.apache.org/POM/4.0.0
           tar -czvf maven-collector-xsd-${{ steps.date.outputs.date }}.tgz \
             -C maven.apache.org \
