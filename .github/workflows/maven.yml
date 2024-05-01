@@ -87,7 +87,12 @@ jobs:
 
       - name: Collect http://maven.apache.org/xsd
         run: |
+          echo "WGET Maven XSDs"
           wget -np -rN -l 1 --no-verbose http://maven.apache.org/xsd
+      
+      - name:  TARchive xsd Library
+        run: |
+          echo "TARchive XSD Library"
           tar -czvf maven-collector-xsd-${{ steps.date.outputs.date }}.tgz \
             -C maven.apache.org \
             xsd
