@@ -10,7 +10,10 @@
 			"version": "none",
 			"installMaven": "true",
 			"installGradle": "false"
-		}
+		},
+		"ghcr.io/devcontainers/features/git": {},
+		"ghcr.io/devcontainers/features/git-lfs": {}
+
 	}
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
