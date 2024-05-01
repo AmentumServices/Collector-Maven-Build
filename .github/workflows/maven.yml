@@ -87,7 +87,7 @@ jobs:
 
       - name: Collect http://maven.apache.org/xsd
         run: |
-          wget -np -rqN --show-progress http://maven.apache.org/xsd
+          wget -np -rN -l 1 --no-verbose http://maven.apache.org/xsd
           tar -czvf maven-collector-xsd-${{ steps.date.outputs.date }}.tgz \
             -C maven.apache.org \
             xsd
