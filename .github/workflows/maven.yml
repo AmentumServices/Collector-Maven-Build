@@ -89,10 +89,7 @@ jobs:
         run: mvn -DskipTests=true -B package
       
       - name: Create BoM ZIP
-        run: |
-            cd target
-            ls -lah
-            zip ../${{ vars.COLLECTOR }}-bom-${{ needs.Date.outputs.Date }}.zip bom.*
+        run: zip -jD ${{ vars.COLLECTOR }}-bom-${{ needs.Date.outputs.Date }}.zip target/bom.*
 
       - name: Upload BOM ZIP
         uses: actions/upload-artifact@v4
