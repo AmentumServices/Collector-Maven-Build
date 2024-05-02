@@ -138,7 +138,9 @@ jobs:
 
       - name: Zipup XSDs
         run: |
+          ls -alht
           cd maven.apache.org
+          ls -alht
           zip -r ${{ vars.COLLECTOR }}-xsd-${{ needs.Date.outputs.Date }}.zip xsd
 
       - name: Upload XSD artifact
