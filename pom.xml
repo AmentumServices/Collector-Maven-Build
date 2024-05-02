@@ -11,11 +11,11 @@
 	</parent>
 
 	<groupId>com.jacobsfederal</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>maven-collector</artifactId>
 	<version>0.0.1</version>
 	
-	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
+	<name>maven-collector</name>
+	<description>maven-collector project for Spring Boot</description>
 	<properties>
 		<!-- Properites used by Maven plugins -->
 		<java.version>17</java.version>
@@ -42,14 +42,14 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
-		   <groupId>org.redisson</groupId>
-		   <artifactId>redisson</artifactId>
-		   <version>3.11.5</version>
+			<groupId>org.redisson</groupId>
+			<artifactId>redisson</artifactId>
+			<version>3.11.5</version>
 		</dependency>  
 		<dependency>
-		    <groupId>redis.clients</groupId>
-		    <artifactId>jedis</artifactId>
-		    <version>5.1.2</version>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>5.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -525,24 +525,23 @@
 			<plugin>
 				<groupId>org.graalvm.buildtools</groupId>
 				<artifactId>native-maven-plugin</artifactId>
+				<version>0.10.0</version>
 			</plugin>
 	<plugin>
 				<groupId>com.google.cloud.tools</groupId>
 				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.4.0</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-http</artifactId>
+				<version>3.5.3</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-file</artifactId>
+				<version>3.5.3</version>
 			</plugin>
-
-		      <plugin>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>versions-maven-plugin</artifactId>
-		      </plugin>
 			
 			<plugin>
 				<groupId>org.asciidoctor</groupId>
@@ -599,7 +598,7 @@
               <stripVersion>false</stripVersion>
 						</configuration>
 					</execution>
-	  <execution>
+					<execution>
             <id>prepare for offline Maven Dependencies</id>
             <phase>initialize</phase>
             <goals>
@@ -625,7 +624,7 @@
 		</executions>
       </plugin>
 
-       <!-- Generate SWBom -->
+      <!-- Generate SWBom -->
       <plugin>
         <groupId>org.cyclonedx</groupId>
         <artifactId>cyclonedx-maven-plugin</artifactId>
