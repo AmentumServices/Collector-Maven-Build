@@ -139,13 +139,14 @@ jobs:
       - name: Zipup XSDs
         run: |
           cd maven.apache.org
-          zip -r ${{ vars.COLLECTOR }}-xsd-${{ needs.Date.outputs.Date }}.zip xsd
+          zip -r  ../${{ vars.COLLECTOR }}-xsd-${{ needs.Date.outputs.Date }}.zip xsd
 
       - name: Upload XSD artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ vars.COLLECTOR }}-xsd-${{ needs.Date.outputs.Date }}.zip
           path: ${{ vars.COLLECTOR }}-xsd-${{ needs.Date.outputs.Date }}.zip
+          if-no-files-found: error
     
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       #- name: Update dependency graph
