@@ -54,7 +54,7 @@ jobs:
       - name: Advance Dependecy versions
         run: |
           set +ex
-          mvn -DskipTests=true -B versions:update-parent
+           mvn --no-transfer-progress -DskipTests=true -B versions:update-parent
           git commit -am "Update versions (${{ needs.Date.outputs.Date }})"
           git push
 
@@ -115,7 +115,7 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn -DskipTests=true -B package
+        run: mvn -DskipTests=true -B --no-transfer-progress package
       
       - name: Create BoM ZIP
         run: zip -jD ${{ vars.COLLECTOR }}-bom-${{ needs.Date.outputs.Date }}.zip target/bom.*
