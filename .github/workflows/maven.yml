@@ -188,6 +188,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
+          name: ${{ vars.COLLECTOR }} Release ${{ needs.Date.outputs.Date }}
           tag_name: ${{ needs.Date.outputs.Date }}
           make_latest: true
           files: |
