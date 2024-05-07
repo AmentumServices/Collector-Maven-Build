@@ -49,6 +49,11 @@ jobs:
         run: |
           set +e
           mvn -DskipTests=true -B package
+          if [ ?$ ]; then
+            echo -e "\n!!!!!!!!!!!!!!!!!!!"
+            echo "!! Package Error !!"
+            echo -e "!!!!!!!!!!!!!!!!!!!\n"
+          fi
       
       - name: TARchive .m2 directory
         run: |
