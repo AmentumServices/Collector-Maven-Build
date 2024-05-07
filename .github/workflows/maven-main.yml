@@ -97,26 +97,6 @@ jobs:
           name: ${{ vars.COLLECTOR }}-m2-${{ needs.Date.outputs.Date }}.tgz.txt
           path: ${{ vars.COLLECTOR }}-m2-${{ needs.Date.outputs.Date }}.tgz.txt
 
-  CollectBOM:
-    needs: [Date, UpdateVers]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: read
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-    
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: maven
-
-      - name: Build with Maven
-        run: mvn -DskipTests=true -B --no-transfer-progress cyclonedx:makeAggregateBom
-      
       - name: Create BoM ZIP
         run: zip -jD ${{ vars.COLLECTOR }}-bom-${{ needs.Date.outputs.Date }}.zip target/bom.*
 
@@ -154,7 +134,7 @@ jobs:
 
   Release:
     runs-on: ubuntu-latest
-    needs: [Date, CollectM2, CollectBOM, CollectXSD, UpdateVers]
+    needs: [Date, CollectM2, CollectXSD, UpdateVers]
     permissions:
       contents: write
       pull-requests: read
