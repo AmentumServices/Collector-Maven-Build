@@ -52,7 +52,7 @@ jobs:
           if [ ?$ ]; then
             echo -e "\n!!!!!!!!!!!!!!!!!!!"
             echo "!! Package Error !!"
-            echo -e "!!!!!!!!!!!!!!!!!!!\n"
+            echo -e "!!!!!!!!!!!!!!!!!!!"
           fi
       
       - name: TARchive .m2 directory
