@@ -6,8 +6,8 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Java CI with Maven
-run-name: ${{ github.actor }} is Collecting Maven-ness🚀
+name: Maven Java CI - Main
+run-name: ${{ github.actor }} is Collecting Main Maven-ness🚀
 on: 
   push:
     branches:

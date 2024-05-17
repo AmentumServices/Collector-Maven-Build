@@ -6,13 +6,13 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Java CI with Maven
-run-name: ${{ github.actor }} is Collecting Maven-ness🚀
-on: 
+name: Maven Java CI - Branches
+run-name: ${{ github.actor }} is Collecting on branch🚀
+on:
   push:
-    branches: []
-  schedule:
-    - cron: '0 0 * * 1' # Update weekly on Monday Midnight
+    branches-ignore:
+      - main
+
 jobs:
   Date:
     runs-on: ubuntu-latest
