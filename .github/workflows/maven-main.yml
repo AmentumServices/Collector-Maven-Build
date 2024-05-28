@@ -116,8 +116,10 @@ jobs:
       
       - name: Create BoM ZIP
         run: |
-          ls -lAh target
+          ls -lAh *
+          tree target
           zip -jD ${{ vars.COLLECTOR }}-bom-${{ needs.Date.outputs.Date }}.zip \
+            target/classes/META-INF/sbom/bom.*
             target/*bom* \
             target/*cyclonedx.*
 
