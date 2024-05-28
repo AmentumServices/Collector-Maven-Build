@@ -243,6 +243,7 @@
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-security</artifactId>
+			<version>6.2.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
@@ -568,11 +569,6 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.7.1</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>3.5.3</version>
 			</plugin>
@@ -589,6 +585,7 @@
 			<plugin>
 				<groupId>com.checkmarx.maven</groupId>
 				<artifactId>checkmarx-maven-plugin</artifactId>
+				<version>2022.2.3</version>
 			</plugin>
 			<plugin>
 				<groupId>org.asciidoctor</groupId>
