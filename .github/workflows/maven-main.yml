@@ -78,8 +78,7 @@ jobs:
       
       - name: TARchive .m2 directory
         run: |
-            ls -lah ${{ github.workspace }}
-            DATE=`date '+%Y%m%d-%H%M'`
+            ls -lAh ${{ github.workspace }}
             tar -cvzf ${{ vars.COLLECTOR }}-m2-${{ needs.Date.outputs.Date }}.tgz -C ~/.m2 . \
               | tee ${{ vars.COLLECTOR }}-m2-${{ needs.Date.outputs.Date }}.tgz.txt
 
@@ -116,7 +115,11 @@ jobs:
         run: mvn -DskipTests=true -B --no-transfer-progress cyclonedx:makeAggregateBom
       
       - name: Create BoM ZIP
-        run: zip -jD ${{ vars.COLLECTOR }}-bom-${{ needs.Date.outputs.Date }}.zip target/bom.*
+        run: |
+          ls -lAh target
+          zip -jD ${{ vars.COLLECTOR }}-bom-${{ needs.Date.outputs.Date }}.zip \
+            target/*bom* \
+            target/*cyclonedx.*
 
       - name: Upload BOM ZIP
         uses: actions/upload-artifact@v4
