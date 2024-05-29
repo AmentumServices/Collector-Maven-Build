@@ -23,8 +23,10 @@ jobs:
       - name: Get current date
         id: DATE
         run: |
+          echo "Setting Date"
           echo "DATE=$(date '+%Y%m%d-%H%M')" >> $GITHUB_OUTPUT
           echo -e "\n$GITHUB_OUTPUT\n"
+          echo "Values:"
           cat $GITHUB_OUTPUT
 
   UpdateVers:
@@ -127,28 +129,6 @@ jobs:
           name: ${{ vars.COLLECTOR }}-bom-${{ needs.Date.outputs.Date }}.zip
           path: ${{ vars.COLLECTOR }}-bom-${{ needs.Date.outputs.Date }}.zip
 
-  CollectXSD:
-    needs: [Date]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: read
-    steps:
-      - name: Collect http://maven.apache.org/xsd
-        run: wget -np -rN -l 1 --no-verbose http://maven.apache.org/xsd
-
-      - name: Zipup XSDs
-        run: |
-          cd maven.apache.org
-          zip -r  ../${{ vars.COLLECTOR }}-xsd-${{ needs.Date.outputs.Date }}.zip xsd
-
-      - name: Upload XSD artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ vars.COLLECTOR }}-xsd-${{ needs.Date.outputs.Date }}.zip
-          path: ${{ vars.COLLECTOR }}-xsd-${{ needs.Date.outputs.Date }}.zip
-          if-no-files-found: error
-
   Code:
     needs: [Date]
     runs-on: ubuntu-latest
@@ -175,6 +155,30 @@ jobs:
         with:
           name: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.bundle
           path: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.bundle
+
+  CollectXSD:
+    needs: [Date]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - name: Collect http://maven.apache.org/xsd
+        run: wget -np -rN -l 1 --no-verbose http://maven.apache.org/xsd
+
+      - name: Zipup XSDs
+        run: |
+          cd maven.apache.org
+          zip -r  ../${{ vars.COLLECTOR }}-xsd-${{ needs.Date.outputs.Date }}.zip xsd
+
+      - name: Upload XSD artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.COLLECTOR }}-xsd-${{ needs.Date.outputs.Date }}.zip
+          path: ${{ vars.COLLECTOR }}-xsd-${{ needs.Date.outputs.Date }}.zip
+          if-no-files-found: error
+
+ 
     
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       #- name: Update dependency graph

@@ -78,8 +78,7 @@ jobs:
       
       - name: TARchive .m2 directory
         run: |
-            ls -lah ${{ github.workspace }}
-            DATE=`date '+%Y%m%d-%H%M'`
+            ls -lAh ${{ github.workspace }}
             tar -cvzf ${{ vars.COLLECTOR }}-m2-${{ needs.Date.outputs.Date }}.tgz -C ~/.m2 . \
               | tee ${{ vars.COLLECTOR }}-m2-${{ needs.Date.outputs.Date }}.tgz.txt
 
@@ -116,13 +115,44 @@ jobs:
         run: mvn -DskipTests=true -B --no-transfer-progress cyclonedx:makeAggregateBom
       
       - name: Create BoM ZIP
-        run: zip -jD ${{ vars.COLLECTOR }}-bom-${{ needs.Date.outputs.Date }}.zip target/bom.*
+        run: |
+          ls -lAh *
+          tree
+          zip -jD ${{ vars.COLLECTOR }}-bom-${{ needs.Date.outputs.Date }}.zip \
+            target/classes/META-INF/sbom/bom.*
 
       - name: Upload BOM ZIP
         uses: actions/upload-artifact@v4
         with:
           name: ${{ vars.COLLECTOR }}-bom-${{ needs.Date.outputs.Date }}.zip
           path: ${{ vars.COLLECTOR }}-bom-${{ needs.Date.outputs.Date }}.zip
+
+  Code:
+    needs: [Date]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Setup Git
+        run: |
+          git config user.name "$(git log -n 1 --pretty=format:%an)"
+          git config user.email "$(git log -n 1 --pretty=format:%ae)"
+
+      - name: Update Submodules if needed
+        shell: bash
+        run: git submodule update --init --recursive --remote
+
+      - name: Bundle Repo1 code base for ${{ vars.COLLECTOR }}
+        run: |
+          git bundle create --progress ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.bundle --all
+          ls -Alht *
+
+      - name: Upload bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.bundle
+          path: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.bundle
     
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       #- name: Update dependency graph
