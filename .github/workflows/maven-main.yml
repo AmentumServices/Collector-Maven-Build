@@ -119,10 +119,13 @@ jobs:
 
       - name: Create BoM ZIP
         run: |
-          ls -lAh *
-          tree
+          echo -e "\nTarget Directory Listing"
+          ls -lAh target/*
+          echo -e "\nTree of Target directory"
+          tree target
+          echo -e "\nZipping BOMs"
           zip -jD ${{ vars.COLLECTOR }}-bom-${{ needs.Date.outputs.Date }}.zip \
-            target/classes/META-INF/sbom/bom.*
+            target/bom.*
 
       - name: Upload BOM ZIP
         uses: actions/upload-artifact@v4
@@ -252,7 +255,51 @@ jobs:
           file_path: "${{ vars.COLLECTOR }}-*.*"
           host_name: 'jacobsfederal.sharepoint.us'
           site_name: 'USCMSNISSCII.DSO'
-          upload_path: 'Shared%20Documents/02.%20SW%20Modernization%20SDT/GitHub%20Artifacts/${{ vars.COLLECTOR }}'
+          upload_path: '${{ vars.SHAREPOINT_BASEPATH }}/${{ vars.COLLECTOR }}/${{ needs.Date.outputs.Date }}'
+          tenant_id: ${{ secrets.SHAREPOINT_TENANT_ID }}
+          client_id: ${{ secrets.SHAREPOINT_APP_ID }}
+          client_secret: ${{ secrets.SHAREPOINT_APP_SECRET }}
+          login_endpoint: 'login.microsoftonline.us'
+          graph_endpoint: 'graph.microsoft.us'
+
+  MakeISO:
+    runs-on:  ubuntu-latest
+    needs: [Date, CollectM2, CollectBOM, CollectXSD, UpdateVers, Code]
+    permissions:
+        contents: write
+        pull-requests: read
+    steps:
+      - name: Install mkisofs
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y mkisofs
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+
+      - name: Show Artifacts
+        run: ls -Alh ${{ vars.COLLECTOR }}-*.*
+
+      - name: Make ISO
+        run: |
+          mkisofs -J -R -v -T -l \
+            -V '${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}' \
+            -A '${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}' \
+            -o ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso \
+            ${{ vars.COLLECTOR }}-*.*
+
+      - name: Show ISO
+        run: ls -Alh *.iso
+        
+      - name: Send ISO to Sharepoint
+        uses: JacobsFederal/sharepoint-file-upload-action@pappasjfed-patch-1
+        with:
+          file_path: "${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.iso"
+          host_name: 'jacobsfederal.sharepoint.us'
+          site_name: 'USCMSNISSCII.DSO'
+          upload_path: '${{ vars.SHAREPOINT_BASEPATH }}/${{ vars.COLLECTOR }}/'
           tenant_id: ${{ secrets.SHAREPOINT_TENANT_ID }}
           client_id: ${{ secrets.SHAREPOINT_APP_ID }}
           client_secret: ${{ secrets.SHAREPOINT_APP_SECRET }}
