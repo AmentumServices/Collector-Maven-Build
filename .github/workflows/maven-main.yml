@@ -82,7 +82,7 @@ jobs:
       - name: TARchive .m2 directory
         run: |
           ls -lAh ${{ github.workspace }}
-          tar -cvzf ${{ vars.COLLECTOR }}-m2-${{ needs.Date.outputs.Date }}.tgz -C ~/.m2 . \
+          tar -cvzf ${{ vars.COLLECTOR }}-m2-${{ needs.Date.outputs.Date }}.tgz -C ~/.m2 repository \
             | tee ${{ vars.COLLECTOR }}-m2-${{ needs.Date.outputs.Date }}.tgz.txt
 
       - name: Upload M2 artifact
