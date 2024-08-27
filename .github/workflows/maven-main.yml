@@ -204,6 +204,13 @@ jobs:
           sha256sum -b ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}* | tee \
             ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.sha
 
+      - name: Upload Artifact sha artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.sha
+          path: ${{ vars.COLLECTOR }}-${{ needs.Date.outputs.Date }}.sha
+          if-no-files-found: error
+
       - name: Show Artifacts
         run: ls -Alh ${{ vars.COLLECTOR }}-*.*
 
