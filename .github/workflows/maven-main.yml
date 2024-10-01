@@ -311,12 +311,12 @@ jobs:
         run: ls -Alh ${{ vars.COLLECTOR }}-*.*
 
       - name: Send Files to Sharepoint
-        uses: JacobsFederal/sharepoint-file-upload-action@pappasjfed-patch-1
+        uses: amentumservices/sharepoint-file-upload-action@pappasjfed-patch-1
         with:
           file_path: "${{ vars.COLLECTOR }}-*.*"
-          host_name: "jacobsfederal.sharepoint.us"
-          site_name: "USCMSNISSCII.DSO"
-          upload_path: "${{ vars.SHAREPOINT_BASEPATH }}/${{ vars.COLLECTOR }}/${{ needs.Date.outputs.Date }}"
+          host_name: "${{ secrets.SHAREPOINT_HOST }}"
+          site_name: "${{ secrets.SHAREPOINT_SITE }}"
+          upload_path: "${{ secrets.SHAREPOINT_BASEPATH }}/${{ vars.COLLECTOR }}/${{ needs.Date.outputs.Date }}"
           tenant_id: ${{ secrets.SHAREPOINT_TENANT_ID }}
           client_id: ${{ secrets.SHAREPOINT_APP_ID }}
           client_secret: ${{ secrets.SHAREPOINT_APP_SECRET }}

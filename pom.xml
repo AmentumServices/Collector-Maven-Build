@@ -10,7 +10,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>com.jacobsfederal</groupId>
+	<groupId>com.amentumservices</groupId>
 	<artifactId>maven-collector</artifactId>
 	<version>0.0.1</version>
 	
